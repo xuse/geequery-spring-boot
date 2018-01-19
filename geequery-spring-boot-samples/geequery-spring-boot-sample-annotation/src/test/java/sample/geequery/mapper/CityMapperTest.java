@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import sample.geequery.domain.City;
 
 /**
- * Tests for {@link CityMapper}.
+ * Tests for {@link CityRepository}.
  * @author wonwoo
  * @since 1.2.1
  */
@@ -34,7 +34,7 @@ import sample.geequery.domain.City;
 public class CityMapperTest {
 
   @Autowired
-  private CityMapper cityMapper;
+  private CityRepository cityMapper;
 
   @Test
   public void findByStateTest() {

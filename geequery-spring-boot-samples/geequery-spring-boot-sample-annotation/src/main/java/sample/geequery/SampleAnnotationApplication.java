@@ -19,7 +19,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import sample.geequery.mapper.CityMapper;
+import sample.geequery.mapper.CityRepository;
 
 @SpringBootApplication
 public class SampleAnnotationApplication implements CommandLineRunner {
@@ -28,9 +28,9 @@ public class SampleAnnotationApplication implements CommandLineRunner {
 		SpringApplication.run(SampleAnnotationApplication.class, args);
 	}
 
-	final private CityMapper cityMapper;
+	final private CityRepository cityMapper;
 
-	public SampleAnnotationApplication(CityMapper cityMapper) {
+	public SampleAnnotationApplication(CityRepository cityMapper) {
 		this.cityMapper = cityMapper;
 	}
 

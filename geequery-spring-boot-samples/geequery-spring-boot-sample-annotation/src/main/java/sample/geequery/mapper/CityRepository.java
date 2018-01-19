@@ -26,7 +26,7 @@ import sample.geequery.domain.City;
  * @author Eddú Meléndez
  */
 @Repository
-public interface CityMapper {
+public interface CityRepository {
 
 	@Query("select * from city where state =:state")
 	City findByState(@Param("state")String state);
