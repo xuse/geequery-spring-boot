@@ -18,6 +18,11 @@ package com.github.geequery.spring.boot.autoconfigure;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import jef.database.SessionFactory;
+import jef.tools.Exceptions;
 
 import org.easyframe.enterprise.spring.CommonDao;
 import org.easyframe.enterprise.spring.CommonDaoImpl;
@@ -25,7 +30,6 @@ import org.easyframe.enterprise.spring.JefJpaDialect;
 import org.easyframe.enterprise.spring.SessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -40,8 +44,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
-import jef.database.SessionFactory;
+import com.atomikos.icatch.jta.UserTransactionManager;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Geequery. Contributes
@@ -121,16 +126,51 @@ public class GeeQueryAutoConfiguration {
 			transactionManager.setJpaDialect(new JefJpaDialect());
 			return transactionManager;
 		case JTA:
-			return null;
+			try{
+				return createJTATransactionManager();
+			}catch(SystemException e){
+				throw Exceptions.asIllegalState(e);
+			}
 		default:
 			throw new IllegalArgumentException("Unknown transaction manager:"+properties.getTransactionMode());
 		}
 	}
 
+	/**
+	 * 生成JTA下的事务管理器
+	 * @return
+	 * @throws SystemException
+	 */
+	private PlatformTransactionManager createJTATransactionManager() throws SystemException {
+		JtaTransactionManager tm=new JtaTransactionManager();
+		UserTransaction ut=new com.atomikos.icatch.jta.UserTransactionImp();
+		ut.setTransactionTimeout(180);
+		tm.setUserTransaction(ut);
+		UserTransactionManager utm=new com.atomikos.icatch.jta.UserTransactionManager();
+		utm.setForceShutdown(true);
+		utm.init();
+		tm.setTransactionManager(utm);
+		return tm;
+		
+
+//		<bean id="transactionManager"
+//			class="org.springframework.transaction.jta.JtaTransactionManager">
+//			<property name="userTransaction">
+//				<bean class="com.atomikos.icatch.jta.UserTransactionImp"
+//					p:transactionTimeout="300" />
+//			</property>
+//			<property name="transactionManager">
+//				<bean class="com.atomikos.icatch.jta.UserTransactionManager"
+//					init-method="init" destroy-method="close" p:forceShutdown="true" />
+//			</property>
+//		</bean>
+
+	}
+
 	@Bean
 	@ConditionalOnMissingBean
 //	@ConditionalOnBean(EntityManagerFactory.class)
-	CommonDao commonDao(@Qualifier("emf1") EntityManagerFactory entityManagerFactory) {
+	CommonDao commonDao(EntityManagerFactory entityManagerFactory) {
 		return new CommonDaoImpl(entityManagerFactory);
 	}
 

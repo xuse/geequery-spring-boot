@@ -11,8 +11,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.github.geequery</groupId>
-		<artifactId>gq-spring-boot</artifactId>
-		<version>1.12.0.RC1</version>
+		<artifactId>geequery-spring-boot</artifactId>
+		<version>1.12.0.RELEASE</version>
 	</parent>
 	<artifactId>geequery-spring-boot-samples</artifactId>
 	<packaging>pom</packaging>
