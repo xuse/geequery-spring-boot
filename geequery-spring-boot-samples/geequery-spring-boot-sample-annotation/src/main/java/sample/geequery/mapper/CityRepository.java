@@ -19,6 +19,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.github.geequery.springdata.annotation.Query;
+import com.github.geequery.springdata.repository.GqRepository;
+import com.github.geequery.springdata.test.entity.Foo;
 
 import sample.geequery.domain.City;
 
@@ -26,7 +28,7 @@ import sample.geequery.domain.City;
  * @author Eddú Meléndez
  */
 @Repository
-public interface CityRepository {
+public interface CityRepository extends GqRepository<City, Long> {
 
 	@Query("select * from city where state =:state")
 	City findByState(@Param("state")String state);

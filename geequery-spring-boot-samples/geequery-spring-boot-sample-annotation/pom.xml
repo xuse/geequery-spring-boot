@@ -13,6 +13,14 @@
 		<dependency>
 			<groupId>com.github.geequery</groupId>
 			<artifactId>geequery-spring-boot-starter</artifactId>
+			<exclusions>
+			<!-- 如果spring-boot发现validate-api，就会去查找valdateion-api的实现，没有找到的情况下会报错 -->
+			<!-- FIXME 要么不要间接引入validation api，要么天生自带hibernate-validation -->
+				<exclusion>
+					<artifactId>validation-api</artifactId>
+					<groupId>javax.validation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>

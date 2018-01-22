@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import jef.codegen.EntityEnhancer;
 import jef.database.SessionFactory;
 import jef.tools.Exceptions;
 
@@ -47,6 +48,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import com.atomikos.icatch.jta.UserTransactionManager;
+import com.github.geequery.springdata.repository.config.EnableGqRepositories;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Geequery. Contributes
@@ -62,6 +64,9 @@ import com.atomikos.icatch.jta.UserTransactionManager;
 @org.springframework.context.annotation.Configuration
 @ConditionalOnClass({ SessionFactory.class, SessionFactoryBean.class })
 @ConditionalOnBean(DataSource.class)
+@EnableGqRepositories(basePackages = { "sample.geequery" },
+transactionManagerRef = "transactionManager",
+entityManagerFactoryRef = "entityManagerFactory")
 @EnableConfigurationProperties(GeeQueryProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableTransactionManagement
@@ -82,42 +87,61 @@ public class GeeQueryAutoConfiguration {
 	public void checkConfigFileExists() {
 	}
 
-	@Bean
-	@ConditionalOnMissingBean
+	@Bean(name="entityManagerFactory")
+	//@ConditionalOnMissingBean
 	public EntityManagerFactory entityManagerFactory(DataSource dataSource, Environment env) {
+		
+		
+		
+		
 		SessionFactoryBean bean = new org.easyframe.enterprise.spring.SessionFactoryBean();
 		bean.setDataSource(dataSource);
+		if (properties.getDynamicTables() != null)
+			bean.setDynamicTables(properties.getDynamicTables());
+		if (properties.getGlobalCacheLiveTime() > 0)
+			bean.setGlobalCacheLiveTime(properties.getGlobalCacheLiveTime());
+		if (properties.getInitDataCharset() != null)
+			bean.setInitDataCharset(properties.getInitDataCharset());
+		if (properties.getDbInitHandler() != null)
+			bean.setDbInitHandler(properties.getDbInitHandler());
+		if (properties.getAnnotatedClasses() != null)
+			bean.setAnnotatedClasses(properties.getAnnotatedClasses());
+		if (properties.getNamedQueryFile() != null)
+			bean.setNamedQueryFile(properties.getNamedQueryFile());
+		if (properties.getNamedQueryTable() != null)
+			bean.setNamedQueryTable(properties.getNamedQueryTable());
+		if (properties.getPackagesToScan() != null){
+			bean.setPackagesToScan(properties.getPackagesToScan());
+			new EntityEnhancer().enhance(properties.getPackagesToScan());
+		}else{
+			//new EntityEnhancer().enhance();
+		}
+
+		// bean.setMaxPoolSize(properties.get)
+		// bean.setMinPoolSize(minPoolSize);
 		bean.setAllowDropColumn(properties.isAllowDropColumn());
 		bean.setAlterTable(properties.isAlterTable());
-		bean.setAnnotatedClasses(properties.getAnnotatedClasses());
 		bean.setCacheDebug(properties.isCacheDebug());
 		bean.setCacheLevel1(properties.isCacheLevel1());
 		bean.setCreateTable(properties.isCreateTable());
-		bean.setDbInitHandler(properties.getDbInitHandler());
 		bean.setDebug(properties.isShowSql());
-		bean.setDynamicTables(properties.getDynamicTables());
-		bean.setGlobalCacheLiveTime(properties.getGlobalCacheLiveTime());
-		bean.setInitData(properties.isInitData());
-		bean.setInitDataCharset(properties.getInitDataCharset());
-//		bean.setMaxPoolSize(properties.get)
-//		bean.setMinPoolSize(minPoolSize);
-		bean.setNamedQueryFile(properties.getNamedQueryFile());
-		bean.setNamedQueryTable(properties.getNamedQueryTable());
-		bean.setPackagesToScan(properties.getPackagesToScan());
 		bean.setRegisteNonMappingTableAsDynamic(properties.isRegisteNonMappingTableAsDynamic());
 		bean.setTransactionMode(properties.getTransactionMode());
 		bean.setUseDataInitTable(properties.isUseDataInitTable());
 		bean.setPackagesToScan(new String[] { "com.github.geequery.springdata.test.entity" });
+		bean.setInitData(properties.isInitData());
+
 		bean.afterPropertiesSet();
+
 		return bean.getObject();
 	}
 
-	@Bean
+	@Bean(name="transactionManager")
 	@ConditionalOnMissingBean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory,DataSource dataSource) {
-		switch(properties.getTransactionMode()){
+	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory, DataSource dataSource) {
+		switch (properties.getTransactionMode()) {
 		case JDBC:
-			//此种场景下是使用其他第三方框架的事务管理器。
+			// 此种场景下是使用其他第三方框架的事务管理器。
 			logger.info("There's no thirdparty transactionManager. creating new DataSourceTransactionManager.");
 			return new DataSourceTransactionManager(dataSource);
 		case JPA:
@@ -126,50 +150,50 @@ public class GeeQueryAutoConfiguration {
 			transactionManager.setJpaDialect(new JefJpaDialect());
 			return transactionManager;
 		case JTA:
-			try{
+			try {
 				return createJTATransactionManager();
-			}catch(SystemException e){
+			} catch (SystemException e) {
 				throw Exceptions.asIllegalState(e);
 			}
 		default:
-			throw new IllegalArgumentException("Unknown transaction manager:"+properties.getTransactionMode());
+			throw new IllegalArgumentException("Unknown transaction manager:" + properties.getTransactionMode());
 		}
 	}
 
 	/**
 	 * 生成JTA下的事务管理器
+	 * 
 	 * @return
 	 * @throws SystemException
 	 */
 	private PlatformTransactionManager createJTATransactionManager() throws SystemException {
-		JtaTransactionManager tm=new JtaTransactionManager();
-		UserTransaction ut=new com.atomikos.icatch.jta.UserTransactionImp();
+		JtaTransactionManager tm = new JtaTransactionManager();
+		UserTransaction ut = new com.atomikos.icatch.jta.UserTransactionImp();
 		ut.setTransactionTimeout(180);
 		tm.setUserTransaction(ut);
-		UserTransactionManager utm=new com.atomikos.icatch.jta.UserTransactionManager();
+		UserTransactionManager utm = new com.atomikos.icatch.jta.UserTransactionManager();
 		utm.setForceShutdown(true);
 		utm.init();
 		tm.setTransactionManager(utm);
 		return tm;
-		
 
-//		<bean id="transactionManager"
-//			class="org.springframework.transaction.jta.JtaTransactionManager">
-//			<property name="userTransaction">
-//				<bean class="com.atomikos.icatch.jta.UserTransactionImp"
-//					p:transactionTimeout="300" />
-//			</property>
-//			<property name="transactionManager">
-//				<bean class="com.atomikos.icatch.jta.UserTransactionManager"
-//					init-method="init" destroy-method="close" p:forceShutdown="true" />
-//			</property>
-//		</bean>
+		// <bean id="transactionManager"
+		// class="org.springframework.transaction.jta.JtaTransactionManager">
+		// <property name="userTransaction">
+		// <bean class="com.atomikos.icatch.jta.UserTransactionImp"
+		// p:transactionTimeout="300" />
+		// </property>
+		// <property name="transactionManager">
+		// <bean class="com.atomikos.icatch.jta.UserTransactionManager"
+		// init-method="init" destroy-method="close" p:forceShutdown="true" />
+		// </property>
+		// </bean>
 
 	}
 
 	@Bean
 	@ConditionalOnMissingBean
-//	@ConditionalOnBean(EntityManagerFactory.class)
+	// @ConditionalOnBean(EntityManagerFactory.class)
 	CommonDao commonDao(EntityManagerFactory entityManagerFactory) {
 		return new CommonDaoImpl(entityManagerFactory);
 	}

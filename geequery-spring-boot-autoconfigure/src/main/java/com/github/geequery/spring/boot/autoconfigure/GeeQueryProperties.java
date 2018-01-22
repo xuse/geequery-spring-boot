@@ -52,7 +52,7 @@ public class GeeQueryProperties {
 	 * 
 	 * @see #setTransactionMode(String)
 	 */
-	private TransactionMode transactionMode;
+	private TransactionMode transactionMode = TransactionMode.JPA;
 
 	/**
 	 * 指定扫描若干包,配置示例如下—— <code><pre>
@@ -100,7 +100,7 @@ public class GeeQueryProperties {
 	 * 扫描到实体后，如果准备修改表，如果数据库中的列更多，是否允许删除列 <br>
 	 * 默认关闭
 	 */
-	private boolean allowDropColumn;
+	private boolean allowDropColumn = false;
 
 	/**
 	 * 自定义一个类，当数据库连上后干一些初始化的事情。
@@ -117,7 +117,7 @@ public class GeeQueryProperties {
 	private boolean initData;
 	
 	
-	private boolean showSql;
+	private boolean showSql = true;
 	
 
 	/**
