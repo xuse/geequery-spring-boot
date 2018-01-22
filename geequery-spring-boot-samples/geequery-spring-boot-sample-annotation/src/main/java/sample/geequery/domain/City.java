@@ -17,19 +17,15 @@ package sample.geequery.domain;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * @author Eddú Meléndez
- */
-@Entity()
+import com.github.geequery.orm.annotation.InitializeData;
+
+@Entity
+@InitializeData(charset="utf8",manualSequence=true,mergeKeys={"name","state"})
 public class City extends jef.database.DataObject implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -40,6 +36,10 @@ public class City extends jef.database.DataObject implements Serializable {
 
 	private String country;
 
+	public enum Field implements jef.database.Field {
+		id, name, state, country
+	}
+	
 	public Long getId() {
 		return this.id;
 	}
@@ -77,7 +77,5 @@ public class City extends jef.database.DataObject implements Serializable {
 		return getId() + "," + getName() + "," + getState() + "," + getCountry();
 	}
 
-	public enum Field implements jef.database.Field {
-		id, name, state, country
-	}
+	private static final long serialVersionUID = 1L;
 }

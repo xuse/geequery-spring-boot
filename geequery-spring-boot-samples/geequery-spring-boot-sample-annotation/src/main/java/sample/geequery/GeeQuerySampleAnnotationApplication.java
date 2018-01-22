@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.persistence.EntityManagerFactory;
 
 import jef.common.log.LogUtil;
+import jef.database.support.InitDataExporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +30,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-import sample.geequery.mapper.CityRepository;
+import sample.geequery.domain.City;
+import sample.geequery.repos.CityRepository;
 
 @SpringBootApplication
-// @EnableAutoConfiguration(
-// // exclude={ DataSourceAutoConfiguration.class,
-// //
-// DataSourceTransactionManagerAutoConfiguration.class,JpaRepositoriesAutoConfiguration.class}
-// )
+//@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class})
 public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
-	private Logger logger=LoggerFactory.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public static void main(String[] args) {
 		try {
@@ -55,12 +53,8 @@ public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
 
 	@Autowired
 	private CityRepository cityMapper;
-
 	private EntityManagerFactory emf;
 
-	// public GeeQuerySampleAnnotationApplication(CityRepository cityMapper) {
-	// this.cityMapper = cityMapper;
-	// }
 
 	public GeeQuerySampleAnnotationApplication(EntityManagerFactory emf) {
 		this.emf = emf;
@@ -68,8 +62,12 @@ public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.cityMapper.findByState("CA"));
+		System.out.println(this.cityMapper.findByState("浙江"));
 		System.out.println("运行测试完成");
 	}
 
+	
+	protected void generateData(){
+		new InitDataExporter(emf).export(City.class);
+	}
 }

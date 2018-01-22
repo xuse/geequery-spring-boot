@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package sample.geequery.mapper;
+package sample.geequery.repos;
 
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;

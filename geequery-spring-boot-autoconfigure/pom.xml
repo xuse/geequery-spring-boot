@@ -24,6 +24,13 @@
 		<dependency>
 			<groupId>org.easyframe</groupId>
 			<artifactId>spring-data-geequery</artifactId>
+			<exclusions>
+				<!-- 如果spring-boot发现validate-api，就会去查找valdateion-api的实现，没有找到的情况下会报错 -->
+				<exclusion>
+					<artifactId>validation-api</artifactId>
+					<groupId>javax.validation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- Compile dependencies -->
 		<dependency>
@@ -42,11 +49,13 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

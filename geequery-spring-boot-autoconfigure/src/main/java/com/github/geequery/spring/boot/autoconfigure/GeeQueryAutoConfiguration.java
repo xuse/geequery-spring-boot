@@ -15,15 +15,14 @@
  */
 package com.github.geequery.spring.boot.autoconfigure;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-import jef.codegen.EntityEnhancer;
 import jef.database.SessionFactory;
 import jef.tools.Exceptions;
+import jef.tools.StringUtils;
 
 import org.easyframe.enterprise.spring.CommonDao;
 import org.easyframe.enterprise.spring.CommonDaoImpl;
@@ -39,6 +38,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -52,21 +52,13 @@ import com.github.geequery.springdata.repository.config.EnableGqRepositories;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Geequery. Contributes
- * a {@link SqlSessionFactory} and a {@link SqlSessionTemplate}.
- *
- * If {@link org.Geequery.spring.annotation.MapperScan} is used, or a
- * configuration file is specified as a property, those will be considered,
- * otherwise this auto-configuration will attempt to register mappers based on
- * the interface definitions in or under the root auto-configuration package.
- *
  * @author Joey
  */
-@org.springframework.context.annotation.Configuration
+@Configuration
 @ConditionalOnClass({ SessionFactory.class, SessionFactoryBean.class })
 @ConditionalOnBean(DataSource.class)
-@EnableGqRepositories(basePackages = { "sample.geequery" },
-transactionManagerRef = "transactionManager",
-entityManagerFactoryRef = "entityManagerFactory")
+//必需配置扫描包的变量
+@EnableGqRepositories(basePackages = { "${geequery.repos}" }, transactionManagerRef = "transactionManager", entityManagerFactoryRef = "entityManagerFactory")
 @EnableConfigurationProperties(GeeQueryProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableTransactionManagement
@@ -83,17 +75,23 @@ public class GeeQueryAutoConfiguration {
 		this.resourceLoader = resourceLoader;
 	}
 
+	/*
+	 *暂无作用
 	@PostConstruct
 	public void checkConfigFileExists() {
 	}
+	*/
 
+	/**
+	 * 1 数据源不在这里配置
+	 * 2 如果已经有同名Bean，则不再生成该Bean
+	 * @param dataSource
+	 * @param env
+	 * @return
+	 */
 	@Bean(name="entityManagerFactory")
-	//@ConditionalOnMissingBean
+	@ConditionalOnMissingBean
 	public EntityManagerFactory entityManagerFactory(DataSource dataSource, Environment env) {
-		
-		
-		
-		
 		SessionFactoryBean bean = new org.easyframe.enterprise.spring.SessionFactoryBean();
 		bean.setDataSource(dataSource);
 		if (properties.getDynamicTables() != null)
@@ -112,9 +110,9 @@ public class GeeQueryAutoConfiguration {
 			bean.setNamedQueryTable(properties.getNamedQueryTable());
 		if (properties.getPackagesToScan() != null){
 			bean.setPackagesToScan(properties.getPackagesToScan());
-			new EntityEnhancer().enhance(properties.getPackagesToScan());
-		}else{
-			//new EntityEnhancer().enhance();
+		}
+		if(StringUtils.isNotEmpty(properties.getInitDataExtension())){
+			bean.setInitDataExtension(properties.getInitDataExtension());
 		}
 
 		// bean.setMaxPoolSize(properties.get)
@@ -128,7 +126,7 @@ public class GeeQueryAutoConfiguration {
 		bean.setRegisteNonMappingTableAsDynamic(properties.isRegisteNonMappingTableAsDynamic());
 		bean.setTransactionMode(properties.getTransactionMode());
 		bean.setUseDataInitTable(properties.isUseDataInitTable());
-		bean.setPackagesToScan(new String[] { "com.github.geequery.springdata.test.entity" });
+		bean.setPackagesToScan(properties.getPackagesToScan());
 		bean.setInitData(properties.isInitData());
 
 		bean.afterPropertiesSet();
@@ -136,6 +134,12 @@ public class GeeQueryAutoConfiguration {
 		return bean.getObject();
 	}
 
+	/**
+	 * 生成事务管理器，如果已经有事务管理器则不再生成
+	 * @param entityManagerFactory
+	 * @param dataSource
+	 * @return
+	 */
 	@Bean(name="transactionManager")
 	@ConditionalOnMissingBean
 	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory, DataSource dataSource) {
@@ -159,6 +163,20 @@ public class GeeQueryAutoConfiguration {
 			throw new IllegalArgumentException("Unknown transaction manager:" + properties.getTransactionMode());
 		}
 	}
+	
+	/**
+	 * 生成CommonDao
+	 * @param entityManagerFactory
+	 * @return CommonDao
+	 */
+	@Bean(name="commonDao")
+	@ConditionalOnMissingBean
+	// @ConditionalOnBean(EntityManagerFactory.class)
+	CommonDao commonDao(EntityManagerFactory entityManagerFactory) {
+		return new CommonDaoImpl(entityManagerFactory);
+	}
+	
+	////////////////////////以下私有/////////////////////////
 
 	/**
 	 * 生成JTA下的事务管理器
@@ -190,12 +208,4 @@ public class GeeQueryAutoConfiguration {
 		// </bean>
 
 	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	// @ConditionalOnBean(EntityManagerFactory.class)
-	CommonDao commonDao(EntityManagerFactory entityManagerFactory) {
-		return new CommonDaoImpl(entityManagerFactory);
-	}
-
 }

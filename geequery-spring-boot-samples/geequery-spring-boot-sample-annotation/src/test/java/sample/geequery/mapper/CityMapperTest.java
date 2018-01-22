@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import sample.geequery.domain.City;
+import sample.geequery.repos.CityRepository;
 
 /**
  * Tests for {@link CityRepository}.

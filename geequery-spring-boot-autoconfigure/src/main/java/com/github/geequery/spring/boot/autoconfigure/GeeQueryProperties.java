@@ -17,15 +17,15 @@ package com.github.geequery.spring.boot.autoconfigure;
 
 import java.util.Properties;
 
-import org.easyframe.enterprise.spring.TransactionMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-
 import jef.common.log.LogUtil;
 import jef.database.DbCfg;
 import jef.database.ORMConfig;
 import jef.database.support.DbInitHandler;
 import jef.tools.JefConfiguration;
+
+import org.easyframe.enterprise.spring.TransactionMode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * Configuration properties for GeeQuery.
@@ -114,7 +114,7 @@ public class GeeQueryProperties {
 	 * 允许用户在和class相同的位置创建一个 <i>class-name</i>.txt的文件，记录了表中的初始化数据。
 	 * 开启此选项后，在初始化建表时会插入这些数据。
 	 */
-	private boolean initData;
+	private boolean initData = true;
 	
 	
 	private boolean showSql = true;
@@ -123,7 +123,12 @@ public class GeeQueryProperties {
 	/**
 	 * 是否使用数据库初始化记录表
 	 */
-	private boolean initDataWithFlagInTable = JefConfiguration.getBoolean(DbCfg.USE_DATAINIT_FLAG_TABLE, false);;
+	private boolean useDataInitTable = JefConfiguration.getBoolean(DbCfg.USE_DATAINIT_FLAG_TABLE, false);;
+	
+	/**
+	 * 初始化数据文件扩展名
+	 */
+	private String initDataExtension=JefConfiguration.get(DbCfg.INIT_DATA_EXTENSION, "txt");;
 
 	private String initDataCharset = "UTF-8";
 
@@ -197,7 +202,7 @@ public class GeeQueryProperties {
 	 * @return whether use the datainit table or not.
 	 */
 	public boolean isUseDataInitTable() {
-		return initDataWithFlagInTable;
+		return useDataInitTable;
 	}
 
 	/**
@@ -209,7 +214,7 @@ public class GeeQueryProperties {
 	 * @return this
 	 */
 	public void setUseDataInitTable(boolean useDataInitTable) {
-		this.initDataWithFlagInTable = useDataInitTable;
+		this.useDataInitTable = useDataInitTable;
 	}
 
 	// private static final ResourcePatternResolver resourceResolver = new
@@ -328,15 +333,6 @@ public class GeeQueryProperties {
 	public void setInitData(boolean initData) {
 		this.initData = initData;
 	}
-
-	public boolean isInitDataWithFlagInTable() {
-		return initDataWithFlagInTable;
-	}
-
-	public void setInitDataWithFlagInTable(boolean initDataWithFlagInTable) {
-		this.initDataWithFlagInTable = initDataWithFlagInTable;
-	}
-
 	public ORMConfig getConfiguration() {
 		return configuration;
 	}
@@ -351,5 +347,13 @@ public class GeeQueryProperties {
 
 	public void setShowSql(boolean showSql) {
 		this.showSql = showSql;
+	}
+
+	public String getInitDataExtension() {
+		return initDataExtension;
+	}
+
+	public void setInitDataExtension(String initDataExtension) {
+		this.initDataExtension = initDataExtension;
 	}
 }
