@@ -32,7 +32,7 @@ public class SampleXmlApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		//模拟通过命令行注入参数
 		List<String> argList=ArrayUtils.asList(args);
-		argList.add("--geequery.repos=sample.geequery.dao");
+		argList.add("--geequery.repos=sample.geequery.repos");
 		argList.add("--geequery.packagesToScan=sample.geequery.domain");
 		argList.add("--logging.level.root=INFO");
 		SpringApplication.run(SampleXmlApplication.class, argList.toArray(new String[argList.size()]));
@@ -49,7 +49,7 @@ public class SampleXmlApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.cityDao.findById(1));
+		System.out.println(this.cityDao.findById(1).orElse(null));
 		System.out.println(this.hotelDao.findById(1));
 	}
 

@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SampleMybatisApplicationTest {
+public class SampleGeeQueryApplicationTest {
 
 	@ClassRule
 	public static OutputCapture out = new OutputCapture();
@@ -34,8 +34,8 @@ public class SampleMybatisApplicationTest {
 	@Test
 	public void test() {
 		String output = out.toString();
-		assertThat(output,containsString("1,San Francisco,CA,US"));
-		assertThat(output,containsString("1,Conrad Treasury Place,William & George Streets,4001"));
+		assertThat(output,containsString("1,上海,上海,中国"));
+		assertThat(output,containsString("2,杭州大饭店,杭州路2号,310000"));
 	}
 	
 }

@@ -17,14 +17,14 @@ package sample.geequery.repos;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.github.geequery.springboot.test.autoconfigure.GeeQueryTest;
+
 /**
- * The Spring Boot Application for testing {@link org.mybatis.spring.boot.test.autoconfigure.MybatisTest @MybatisTest}.
+ * The Spring Boot Application for testing {@link GeeQueryTest @GeeQueryTest}.
  * <p>
- * This class has role for prevent to run the {@link sample.mybatis.SampleXmlApplication}.
+ * This class has role for prevent to run the {@link sample.geequery.SampleXmlApplication}.
  * For more detail information, please refer <a href="http://stackoverflow.com/questions/42722480/jdbctest-detect-class-annotated-springbootapplication">Here</a>.
  *
- * @author Kazuki Shimizu
- * @since 1.2.1
  */
 @SpringBootApplication
 public class DaoTestApplication {

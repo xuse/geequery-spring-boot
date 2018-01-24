@@ -19,9 +19,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * Example component that annotated {@link Component @Component} used with {@link GeeQueryTest} tests.
- *
- * @author wonwoo
- * @since 1.2.1
  */
 @Component
 public class ExampleComponent {

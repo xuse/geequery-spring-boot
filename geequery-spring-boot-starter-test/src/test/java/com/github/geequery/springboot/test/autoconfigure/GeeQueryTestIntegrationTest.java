@@ -15,10 +15,6 @@
  */
 package com.github.geequery.springboot.test.autoconfigure;
 
-import java.util.List;
-
-import jef.database.QB;
-
 import org.easyframe.enterprise.spring.CommonDao;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -42,9 +38,6 @@ import com.github.geequery.springboot.test.domain.Sample;
 
 /**
  * Integration tests for {@link GeeQueryTest}.
- *
- * @author wonwoo
- * @since 1.2.1
  */
 @RunWith(SpringRunner.class)
 @GeeQueryTest(includeFilters = {@ComponentScan.Filter(Service.class)})

@@ -21,7 +21,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.github.geequery.orm.annotation.InitializeData;
+
 @Entity
+@InitializeData(manualSequence=true)
 public class Hotel extends jef.database.DataObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -86,6 +89,6 @@ public class Hotel extends jef.database.DataObject implements Serializable {
 
 
 	public enum Field implements jef.database.Field {
-		city, name, address, zip, id
+		id, city, name, address, zip 
 	}
 }

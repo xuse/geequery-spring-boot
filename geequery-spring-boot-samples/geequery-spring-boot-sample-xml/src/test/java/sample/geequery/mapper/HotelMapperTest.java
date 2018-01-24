@@ -27,8 +27,6 @@ import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link HotelMapper}.
- * @author wonwoo
- * @since 1.2.1
  */
 @RunWith(SpringRunner.class)
 public class HotelMapperTest {

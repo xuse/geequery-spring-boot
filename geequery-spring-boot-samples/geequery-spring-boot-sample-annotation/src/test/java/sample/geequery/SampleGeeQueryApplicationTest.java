@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SampleMybatisApplicationTest {
+public class SampleGeeQueryApplicationTest {
 
 	@ClassRule
 	public static OutputCapture out = new OutputCapture();

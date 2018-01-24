@@ -20,7 +20,10 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.github.geequery.orm.annotation.InitializeData;
+
 @Entity
+@InitializeData(manualSequence=true)
 public class City extends jef.database.DataObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;

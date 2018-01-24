@@ -18,13 +18,11 @@ package sample.geequery.mapper;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * The Spring Boot Application for testing {@link org.mybatis.spring.boot.test.autoconfigure.MybatisTest @MybatisTest}.
+ * The Spring Boot Application for testing {@link GeeQueryTest @GeeQueryTest}.
  * <p>
  * This class has role for prevent to run the {@link sample.GeeQuerySampleAnnotationApplication.SampleAnnotationApplication}.
  * For more detail information, please refer <a href="http://stackoverflow.com/questions/42722480/jdbctest-detect-class-annotated-springbootapplication">Here</a>.
  *
- * @author Kazuki Shimizu
- * @since 1.2.1
  */
 @SpringBootApplication
 public class MapperTestApplication {
