@@ -20,8 +20,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import sample.geequery.dao.HotelDao;
 import sample.geequery.domain.Hotel;
+import sample.geequery.repos.HotelDao;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 

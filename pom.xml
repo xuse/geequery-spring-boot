@@ -24,14 +24,13 @@
 		<module>geequery-spring-boot-autoconfigure</module>
 		<!-- 继承启动 -->
 		<module>geequery-spring-boot-starter</module>
-		
-		<!-- 示例代码 x2 -->
-		<module>geequery-spring-boot-samples</module>
-		
-		<!-- 测试用的自动配置 -->
-		<module>geequery-spring-boot-test-autoconfigure</module>
+
 		<!-- 测试用的Starter -->
 		<module>geequery-spring-boot-starter-test</module>
+		<!-- 示例代码 x2 -->
+		<module>geequery-spring-boot-samples</module>
+
+
 	</modules>
 
 	<distributionManagement>
@@ -80,7 +79,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.github.geequery</groupId>
-				<artifactId>geequery-spring-boot-test-autoconfigure</artifactId>
+				<artifactId>geequery-spring-boot-starter-test</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

@@ -52,6 +52,16 @@ import com.github.geequery.springdata.repository.config.EnableGqRepositories;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Geequery. Contributes
+ * The Configuration must consume a Property named 'geequery.repos'.
+ * It can be provided via these way (Spring PropertyPlaceHolder):
+ * <ol>
+ * <li>From command-line args. such as --geequery.repos=xxx</li>
+ * <li>From System.getProperty();</li>
+ * <li>From System.getenv() , the environment variable of System;</li> 
+ * <li>From JNDI of java:comp/env</li>
+ * <li>From properties file which assigned in @PropertySource</li>
+ * <li>In application.properties(or config/application.properties), or any other spring-boot profiles.</li>
+ * </ol>  
  * @author Joey
  */
 @Configuration

@@ -13,29 +13,37 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package sample.geequery;
+package sample.geequery.mapper;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.rule.OutputCapture;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.hamcrest.CoreMatchers.*;
 
+import sample.geequery.domain.City;
+import sample.geequery.repos.CityRepository;
 
+import com.github.geequery.springboot.test.autoconfigure.GeeQueryTest;
+
+/**
+ * Tests for {@link CityRepository}.
+ */
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class SampleMybatisApplicationTest {
+@GeeQueryTest
+public class CityRepositoryTest {
 
-	@ClassRule
-	public static OutputCapture out = new OutputCapture();
+	@Autowired
+	private CityRepository cityRepository;
 
 	@Test
-	public void test() {
-		String output = out.toString();
-		Assert.assertThat(output,containsString("2,杭州,浙江,中国"));
+	public void findByStateTest() {
+		City city = cityRepository.findByState("上海");
+		Assert.assertThat(city.getName(), equalTo("上海"));
+		Assert.assertThat(city.getState(), equalTo("上海"));
+		Assert.assertThat(city.getCountry(), equalTo("中国"));
 	}
 
 }

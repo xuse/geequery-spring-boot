@@ -15,21 +15,27 @@
  */
 package sample.geequery;
 
+import java.util.List;
+
+import jef.tools.ArrayUtils;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.github.geequery.springdata.repository.config.EnableGqRepositories;
-
-import sample.geequery.dao.CityDao;
-import sample.geequery.dao.HotelDao;
+import sample.geequery.repos.CityDao;
+import sample.geequery.repos.HotelDao;
 
 @SpringBootApplication
-@EnableGqRepositories(basePackages = { "sample.geequery.dao" } )
 public class SampleXmlApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SampleXmlApplication.class, args);
+		//模拟通过命令行注入参数
+		List<String> argList=ArrayUtils.asList(args);
+		argList.add("--geequery.repos=sample.geequery.dao");
+		argList.add("--geequery.packagesToScan=sample.geequery.domain");
+		argList.add("--logging.level.root=INFO");
+		SpringApplication.run(SampleXmlApplication.class, argList.toArray(new String[argList.size()]));
 	}
 
 	private final CityDao cityDao;

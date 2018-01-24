@@ -19,20 +19,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.easyframe.enterprise.spring.CommonDao;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.EmbeddedDataSourceConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 
-/**
- * Tests for {@link MybatisAutoConfiguration}
- *
- * @author Eddú Meléndez
- * @author Josh Long
- * @author Kazuki Shimizu
- */
+@PropertySource("test.properties")
 public class GeeQueryAutoConfigurationTest {
 
 	private AnnotationConfigApplicationContext context;
@@ -59,35 +55,12 @@ public class GeeQueryAutoConfigurationTest {
 
 	@Test
 	public void testDefaultConfiguration() {
+		System.setProperty("geequery.repos", this.getClass().getPackage().getName());
 		this.context.register(EmbeddedDataSourceConfiguration.class,
 				GeeQueryAutoConfiguration.class,
 				PropertyPlaceholderAutoConfiguration.class);
 		this.context.refresh();
 		assertThat(this.context.getBeanNamesForType(EntityManagerFactory.class)).hasSize(1);
-//		assertThat(this.context.getBean(SqlSessionTemplate.class).getExecutorType()).isEqualTo(ExecutorType.SIMPLE);
-//		assertThat(this.context.getBean(SqlSessionFactory.class).getConfiguration().isMapUnderscoreToCamelCase()).isFalse();
+		assertThat(this.context.getBeanNamesForType(CommonDao.class)).hasSize(1);
 	}
-
-//	@Test
-//	public void testWithConfigLocation() {
-//		TestPropertyValues.of("mybatis.config-location:mybatis-config.xml").applyTo(this.context);
-//		this.context.register(EmbeddedDataSourceConfiguration.class,
-//				MybatisAutoConfiguration.class, MybatisMapperConfiguration.class,
-//				PropertyPlaceholderAutoConfiguration.class);
-//		this.context.refresh();
-//		assertThat(this.context.getBeanNamesForType(SqlSessionFactory.class)).hasSize(1);
-//		assertThat(this.context.getBeanNamesForType(CityMapperImpl.class)).hasSize(1);
-//		assertThat(this.context.getBean(SqlSessionTemplate.class).getExecutorType()).isEqualTo(ExecutorType.BATCH);
-//		assertThat(this.context.getBean(SqlSessionFactory.class).getConfiguration().isMapUnderscoreToCamelCase()).isTrue();
-//	}
-//
-//	@Test
-//	public void testWithCheckConfigLocationFileExists() {
-//		TestPropertyValues.of("mybatis.config-location:mybatis-config.xml",
-//				"mybatis.check-config-location=true").applyTo(this.context);
-//		this.context.register(EmbeddedDataSourceConfiguration.class,
-//				MybatisAutoConfiguration.class);
-//		this.context.refresh();
-//		assertThat(this.context.getBeanNamesForType(SqlSessionFactory.class)).hasSize(1);
-//	}
 }

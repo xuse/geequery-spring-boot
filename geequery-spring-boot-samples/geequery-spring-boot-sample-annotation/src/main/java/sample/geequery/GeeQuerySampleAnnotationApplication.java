@@ -15,11 +15,10 @@
  */
 package sample.geequery;
 
-import java.io.IOException;
-
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
-import jef.common.log.LogUtil;
+import jef.database.datasource.SimpleDataSource;
 import jef.database.support.InitDataExporter;
 
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import sample.geequery.domain.City;
 import sample.geequery.repos.CityRepository;
@@ -38,13 +38,12 @@ import sample.geequery.repos.CityRepository;
 public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+//	@Bean
+//	public DataSource getDataSource(){
+//		return new SimpleDataSource("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8","root","admin");
+//	}
+	
 	public static void main(String[] args) {
-		try {
-			LogUtil.show(GeeQuerySampleAnnotationApplication.class.getClassLoader().getResources("META-INF/spring.factories"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		SpringApplication.run(GeeQuerySampleAnnotationApplication.class, args);
 	}
 
@@ -53,12 +52,11 @@ public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
 
 	@Autowired
 	private CityRepository cityMapper;
+	
+	@Autowired
 	private EntityManagerFactory emf;
 
 
-	public GeeQuerySampleAnnotationApplication(EntityManagerFactory emf) {
-		this.emf = emf;
-	}
 
 	@Override
 	public void run(String... args) throws Exception {

@@ -20,11 +20,13 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.github.geequery.orm.annotation.InitializeData;
 
 @Entity
 @InitializeData(charset="utf8",manualSequence=true,mergeKeys={"name","state"})
+@Table(name="city")
 public class City extends jef.database.DataObject implements Serializable {
 	@Id
 	@GeneratedValue
