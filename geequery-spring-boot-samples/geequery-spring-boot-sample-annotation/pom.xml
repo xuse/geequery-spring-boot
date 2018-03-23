@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.geequery</groupId>
 		<artifactId>geequery-spring-boot-samples</artifactId>
-		<version>1.12.0-SNAPSHOT</version>
+		<version>1.12.0.RELEASE</version>
 	</parent>
 	<artifactId>geequery-spring-boot-sample-annotation</artifactId>
 	<name>geequery-spring-boot-sample-annotation</name>
@@ -54,6 +54,9 @@
 						<goals>
 							<goal>repackage</goal>
 						</goals>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

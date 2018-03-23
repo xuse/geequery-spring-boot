@@ -25,7 +25,6 @@ import jef.tools.JefConfiguration;
 
 import org.easyframe.enterprise.spring.TransactionMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * Configuration properties for GeeQuery.
@@ -225,12 +224,12 @@ public class GeeQueryProperties {
 	 */
 	private Properties configurationProperties;
 
-	/**
-	 * A Configuration object for customize default settings. If
-	 * {@link #configLocation} is specified, this property is not used.
-	 */
-	@NestedConfigurationProperty
-	private ORMConfig configuration;
+//	/**
+//	 * A Configuration object for customize default settings. If
+//	 * {@link #configLocation} is specified, this property is not used.
+//	 */
+//	@NestedConfigurationProperty
+//	private ORMConfig configuration;
 
 	/**
 	 * @since 1.2.0
@@ -333,13 +332,13 @@ public class GeeQueryProperties {
 	public void setInitData(boolean initData) {
 		this.initData = initData;
 	}
-	public ORMConfig getConfiguration() {
-		return configuration;
-	}
-
-	public void setConfiguration(ORMConfig configuration) {
-		this.configuration = configuration;
-	}
+//	public ORMConfig getConfiguration() {
+//		return configuration;
+//	}
+//
+//	public void setConfiguration(ORMConfig configuration) {
+//		this.configuration = configuration;
+//	}
 
 	public boolean isShowSql() {
 		return showSql;
