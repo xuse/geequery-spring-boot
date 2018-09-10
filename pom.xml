@@ -11,13 +11,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.geequery</groupId>
 	<artifactId>geequery-spring-boot</artifactId>
-	<version>1.12.0.RELEASE</version>
+	<version>1.12.3.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<name>geequery-spring-boot</name>
 	<description>Spring Boot Support for geequery</description>
 	<url>http://www.geequery.org/spring-boot-starter/</url>
-	<inceptionYear>2015</inceptionYear>
+	<inceptionYear>2018</inceptionYear>
 
 	<modules>
 		<!-- 自动配置 -->
@@ -50,7 +50,7 @@
 
 	<properties>
 		<geequery.version>${project.version}</geequery.version>
-		<spring-boot.version>2.0.0.RELEASE</spring-boot.version>
+		<spring-boot.version>2.0.4.RELEASE</spring-boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.testSource>1.8</maven.compiler.testSource>
