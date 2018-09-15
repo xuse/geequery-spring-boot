@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>com.github.geequery</groupId>
 		<artifactId>geequery-spring-boot-samples</artifactId>
-		<version>1.12.3.RELEASE</version>
+		<version>1.12.4.RELEASE</version>
 	</parent>
 	<artifactId>geequery-spring-boot-sample-xml</artifactId>
 	<name>geequery-spring-boot-sample-xml</name>
