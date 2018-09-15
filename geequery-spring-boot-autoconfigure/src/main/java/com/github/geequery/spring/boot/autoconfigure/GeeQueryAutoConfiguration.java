@@ -20,10 +20,6 @@ import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-import jef.database.SessionFactory;
-import jef.tools.Exceptions;
-import jef.tools.StringUtils;
-
 import org.easyframe.enterprise.spring.CommonDao;
 import org.easyframe.enterprise.spring.CommonDaoImpl;
 import org.easyframe.enterprise.spring.JefJpaDialect;
@@ -49,6 +45,10 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 
 import com.atomikos.icatch.jta.UserTransactionManager;
 import com.github.geequery.springdata.repository.config.EnableGqRepositories;
+
+import jef.database.SessionFactory;
+import jef.tools.Exceptions;
+import jef.tools.StringUtils;
 
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Geequery. Contributes
@@ -99,7 +99,7 @@ public class GeeQueryAutoConfiguration {
 	 * @param env
 	 * @return
 	 */
-	@Bean(name="entityManagerFactory")
+	@Bean(name="entityManagerFactory",destroyMethod="close")
 	@ConditionalOnMissingBean
 	public EntityManagerFactory entityManagerFactory(DataSource dataSource, Environment env) {
 		SessionFactoryBean bean = new org.easyframe.enterprise.spring.SessionFactoryBean();
@@ -120,6 +120,9 @@ public class GeeQueryAutoConfiguration {
 			bean.setNamedQueryTable(properties.getNamedQueryTable());
 		if (properties.getPackagesToScan() != null){
 			bean.setPackagesToScan(properties.getPackagesToScan());
+		}
+		if (StringUtils.isNotEmpty(properties.getInitDataRoot())){
+			bean.setInitDataRoot(properties.getInitDataRoot());
 		}
 		if(StringUtils.isNotEmpty(properties.getInitDataExtension())){
 			bean.setInitDataExtension(properties.getInitDataExtension());

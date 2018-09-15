@@ -102,7 +102,7 @@ public class GeeQueryProperties {
 	private boolean allowDropColumn = false;
 
 	/**
-	 * 自定义一个类，当数据库连上后干一些初始化的事情。
+	 * 自定义一个类，当数据库连上后干一些初始化的事情。必须实现{@link DbInitHandler}
 	 * 
 	 * @see DbInitHandler
 	 */
@@ -114,21 +114,30 @@ public class GeeQueryProperties {
 	 * 开启此选项后，在初始化建表时会插入这些数据。
 	 */
 	private boolean initData = true;
-	
-	
+
+	/**
+	 * 控制台输出SQL
+	 */
 	private boolean showSql = true;
-	
+
+	/**
+	 * 初始化数据所在路径，/表示classpath的根路径。
+	 */
+	private String initDataRoot = JefConfiguration.get(DbCfg.INIT_DATA_ROOT, "/");
 
 	/**
 	 * 是否使用数据库初始化记录表
 	 */
-	private boolean useDataInitTable = JefConfiguration.getBoolean(DbCfg.USE_DATAINIT_FLAG_TABLE, false);;
-	
+	private boolean useDataInitTable = JefConfiguration.getBoolean(DbCfg.USE_DATAINIT_FLAG_TABLE, false);
+
 	/**
 	 * 初始化数据文件扩展名
 	 */
-	private String initDataExtension=JefConfiguration.get(DbCfg.INIT_DATA_EXTENSION, "txt");;
+	private String initDataExtension = JefConfiguration.get(DbCfg.INIT_DATA_EXTENSION, "txt");;
 
+	/**
+	 * 初始化数据文件编码
+	 */
 	private String initDataCharset = "UTF-8";
 
 	public boolean isCacheDebug() {
@@ -216,20 +225,10 @@ public class GeeQueryProperties {
 		this.useDataInitTable = useDataInitTable;
 	}
 
-	// private static final ResourcePatternResolver resourceResolver = new
-	// PathMatchingResourcePatternResolver();
-
 	/**
 	 * Externalized properties for gqquery configuration.
 	 */
 	private Properties configurationProperties;
-
-//	/**
-//	 * A Configuration object for customize default settings. If
-//	 * {@link #configLocation} is specified, this property is not used.
-//	 */
-//	@NestedConfigurationProperty
-//	private ORMConfig configuration;
 
 	/**
 	 * @since 1.2.0
@@ -332,13 +331,6 @@ public class GeeQueryProperties {
 	public void setInitData(boolean initData) {
 		this.initData = initData;
 	}
-//	public ORMConfig getConfiguration() {
-//		return configuration;
-//	}
-//
-//	public void setConfiguration(ORMConfig configuration) {
-//		this.configuration = configuration;
-//	}
 
 	public boolean isShowSql() {
 		return showSql;
@@ -354,5 +346,13 @@ public class GeeQueryProperties {
 
 	public void setInitDataExtension(String initDataExtension) {
 		this.initDataExtension = initDataExtension;
+	}
+
+	public String getInitDataRoot() {
+		return initDataRoot;
+	}
+
+	public void setInitDataRoot(String initDataRoot) {
+		this.initDataRoot = initDataRoot;
 	}
 }
