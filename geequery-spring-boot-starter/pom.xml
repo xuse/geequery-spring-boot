@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>com.github.geequery</groupId>
 		<artifactId>geequery-spring-boot</artifactId>
-		<version>1.12.6.RELEASE</version>
+		<version>1.12.6.1</version>
 	</parent>
 	<artifactId>geequery-spring-boot-starter</artifactId>
 	<url>http://maven.apache.org</url>

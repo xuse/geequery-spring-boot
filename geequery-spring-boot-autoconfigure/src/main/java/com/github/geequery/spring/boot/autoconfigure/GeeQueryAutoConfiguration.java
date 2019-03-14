@@ -170,7 +170,7 @@ public class GeeQueryAutoConfiguration {
 			try {
 				return createJTATransactionManager();
 			} catch (SystemException e) {
-				throw Exceptions.asIllegalState(e);
+				throw Exceptions.illegalState(e);
 			}
 		default:
 			throw new IllegalArgumentException("Unknown transaction manager:" + properties.getTransactionMode());
