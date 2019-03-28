@@ -17,14 +17,14 @@ package com.github.geequery.spring.boot.autoconfigure;
 
 import java.util.Properties;
 
+import org.easyframe.enterprise.spring.TransactionMode;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import jef.common.log.LogUtil;
 import jef.database.DbCfg;
 import jef.database.ORMConfig;
 import jef.database.support.DbInitHandler;
 import jef.tools.JefConfiguration;
-
-import org.easyframe.enterprise.spring.TransactionMode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * Configuration properties for GeeQuery.
