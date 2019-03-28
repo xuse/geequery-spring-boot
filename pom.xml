@@ -50,7 +50,7 @@
 	</distributionManagement>
 
 	<properties>
-		<geequery.version>${project.version}</geequery.version>
+		<geequery.version>1.12.7.2</geequery.version>
 		<spring-boot.version>2.1.3.RELEASE</spring-boot.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
