@@ -6,6 +6,7 @@ target/
 .project
 .classpath
 *.gz
+*.db
 *.last
 *.iml
 *.log
