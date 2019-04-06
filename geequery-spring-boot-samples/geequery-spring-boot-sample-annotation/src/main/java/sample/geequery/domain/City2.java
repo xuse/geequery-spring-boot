@@ -25,9 +25,9 @@ import javax.persistence.Table;
 import com.github.geequery.orm.annotation.InitializeData;
 
 @Entity
-@InitializeData(charset="utf8",manualSequence=true,mergeKeys={"name","state"})
-@Table(name="city")
-public class City implements Serializable {
+@InitializeData(charset="utf8",manualSequence=true,mergeKeys={"name","state"},ensureFileExists=false)
+@Table(name="city2")
+public class City2 extends jef.database.DataObject implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -37,6 +37,10 @@ public class City implements Serializable {
 	private String state;
 
 	private String country;
+
+	public enum Field implements jef.database.Field {
+		id, name, state, country
+	}
 	
 	public Long getId() {
 		return this.id;
@@ -76,9 +80,4 @@ public class City implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
-	
-
-	public enum Field implements jef.database.Field {
-		id, name, state, country
-	}
 }

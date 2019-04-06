@@ -15,12 +15,6 @@
  */
 package sample.geequery;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import jef.database.datasource.SimpleDataSource;
-import jef.database.support.InitDataExporter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +22,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 
+import jef.database.SessionFactory;
+import jef.database.support.InitDataExporter;
 import sample.geequery.domain.City;
 import sample.geequery.repos.CityRepository;
 
@@ -54,7 +49,7 @@ public class GeeQuerySampleAnnotationApplication implements CommandLineRunner {
 	private CityRepository cityMapper;
 	
 	@Autowired
-	private EntityManagerFactory emf;
+	private SessionFactory emf;
 
 
 

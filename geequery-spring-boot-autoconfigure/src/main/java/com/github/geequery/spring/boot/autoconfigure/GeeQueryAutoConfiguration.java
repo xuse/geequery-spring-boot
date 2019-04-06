@@ -15,14 +15,12 @@
  */
 package com.github.geequery.spring.boot.autoconfigure;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 import org.easyframe.enterprise.spring.CommonDao;
 import org.easyframe.enterprise.spring.CommonDaoImpl;
-import org.easyframe.enterprise.spring.JefJpaDialect;
 import org.easyframe.enterprise.spring.SessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +36,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
@@ -47,7 +44,6 @@ import com.atomikos.icatch.jta.UserTransactionManager;
 import com.github.geequery.springdata.repository.config.EnableGqRepositories;
 
 import jef.database.SessionFactory;
-import jef.tools.Exceptions;
 import jef.tools.StringUtils;
 
 /**
@@ -68,7 +64,7 @@ import jef.tools.StringUtils;
 @ConditionalOnClass({ SessionFactory.class, SessionFactoryBean.class })
 @ConditionalOnBean(DataSource.class)
 //必需配置扫描包的变量
-@EnableGqRepositories(basePackages = { "${geequery.repos}" }, transactionManagerRef = "transactionManager", entityManagerFactoryRef = "entityManagerFactory")
+@EnableGqRepositories(basePackages = { "${geequery.repos}" }, transactionManagerRef = "transactionManager", sessionFactoryRef = "sessionFactory")
 @EnableConfigurationProperties(GeeQueryProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableTransactionManagement
@@ -99,9 +95,9 @@ public class GeeQueryAutoConfiguration {
 	 * @param env
 	 * @return
 	 */
-	@Bean(name="entityManagerFactory",destroyMethod="close")
+	@Bean(name="sessionFactory",destroyMethod="shutdown")
 	@ConditionalOnMissingBean
-	public EntityManagerFactory entityManagerFactory(DataSource dataSource, Environment env) {
+	public SessionFactory entityManagerFactory(DataSource dataSource, Environment env) {
 		SessionFactoryBean bean = new org.easyframe.enterprise.spring.SessionFactoryBean();
 		bean.setDataSource(dataSource);
 		if (properties.getDynamicTables() != null)
@@ -137,7 +133,6 @@ public class GeeQueryAutoConfiguration {
 		bean.setCreateTable(properties.isCreateTable());
 		bean.setDebug(properties.isShowSql());
 		bean.setRegisteNonMappingTableAsDynamic(properties.isRegisteNonMappingTableAsDynamic());
-		bean.setTransactionMode(properties.getTransactionMode());
 		bean.setUseDataInitTable(properties.isUseDataInitTable());
 		bean.setPackagesToScan(properties.getPackagesToScan());
 		bean.setInitData(properties.isInitData());
@@ -155,26 +150,26 @@ public class GeeQueryAutoConfiguration {
 	 */
 	@Bean(name="transactionManager")
 	@ConditionalOnMissingBean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory, DataSource dataSource) {
-		switch (properties.getTransactionMode()) {
-		case JDBC:
+	public PlatformTransactionManager transactionManager(SessionFactory entityManagerFactory, DataSource dataSource) {
+//		switch (properties.getTransactionMode()) {
+//		case JDBC:
 			// 此种场景下是使用其他第三方框架的事务管理器。
 			logger.info("There's no thirdparty transactionManager. creating new DataSourceTransactionManager.");
 			return new DataSourceTransactionManager(dataSource);
-		case JPA:
-			JpaTransactionManager transactionManager = new JpaTransactionManager();
-			transactionManager.setEntityManagerFactory(entityManagerFactory);
-			transactionManager.setJpaDialect(new JefJpaDialect());
-			return transactionManager;
-		case JTA:
-			try {
-				return createJTATransactionManager();
-			} catch (SystemException e) {
-				throw Exceptions.illegalState(e);
-			}
-		default:
-			throw new IllegalArgumentException("Unknown transaction manager:" + properties.getTransactionMode());
-		}
+//		case JPA:
+//			JpaTransactionManager transactionManager = new JpaTransactionManager();
+//			transactionManager.setEntityManagerFactory(entityManagerFactory);
+//			transactionManager.setJpaDialect(new JefJpaDialect());
+//			return transactionManager;
+//		case JTA:
+//			try {
+//				return createJTATransactionManager();
+//			} catch (SystemException e) {
+//				throw Exceptions.illegalState(e);
+//			}
+//		default:
+//			throw new IllegalArgumentException("Unknown transaction manager:" + properties.getTransactionMode());
+//		}
 	}
 	
 	/**
@@ -184,8 +179,8 @@ public class GeeQueryAutoConfiguration {
 	 */
 	@Bean(name="commonDao")
 	@ConditionalOnMissingBean
-	// @ConditionalOnBean(EntityManagerFactory.class)
-	CommonDao commonDao(EntityManagerFactory entityManagerFactory) {
+	//@ConditionalOnBean(SessionFactory.class)
+	CommonDao commonDao(SessionFactory entityManagerFactory) {
 		return new CommonDaoImpl(entityManagerFactory);
 	}
 	

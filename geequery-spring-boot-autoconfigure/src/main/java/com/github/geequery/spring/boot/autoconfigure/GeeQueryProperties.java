@@ -17,7 +17,6 @@ package com.github.geequery.spring.boot.autoconfigure;
 
 import java.util.Properties;
 
-import org.easyframe.enterprise.spring.TransactionMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import jef.common.log.LogUtil;
@@ -45,13 +44,6 @@ public class GeeQueryProperties {
 	 * 命名查询所在的表
 	 */
 	private String namedQueryTable;
-
-	/**
-	 * 事务支持类型
-	 * 
-	 * @see #setTransactionMode(String)
-	 */
-	private TransactionMode transactionMode = TransactionMode.JPA;
 
 	/**
 	 * 指定扫描若干包,配置示例如下—— <code><pre>
@@ -258,14 +250,6 @@ public class GeeQueryProperties {
 
 	public void setNamedQueryTable(String namedQueryTable) {
 		this.namedQueryTable = namedQueryTable;
-	}
-
-	public TransactionMode getTransactionMode() {
-		return transactionMode;
-	}
-
-	public void setTransactionMode(TransactionMode transactionMode) {
-		this.transactionMode = transactionMode;
 	}
 
 	public String[] getPackagesToScan() {
