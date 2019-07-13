@@ -191,10 +191,6 @@ public class GeeQueryProperties {
 		ORMConfig.getInstance().setCacheLevel2(second);
 	}
 
-	public void setUseSystemOut(boolean flag) {
-		LogUtil.useSlf4j = !flag;
-	}
-
 	/**
 	 * 是否启用数据初始化信息记录表。 如果启用，会自动在数据库中创建表 allow_data_initialize，其中
 	 * do_init设置为0时，启动时不进行数据初始化。 如果设置为1，启动时进行数据初始化。
